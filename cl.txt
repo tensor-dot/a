@@ -1,0 +1,400 @@
+package circularlist;
+
+
+class CircularLinkedList {
+    private Node head;
+
+    // Insert at the start
+    public void insertAtStart(Product product) {
+        Node newNode = new Node(product);
+        if (head == null) {
+            head = newNode;
+            newNode.next = head;
+        } else {
+            Node temp = head;
+            while (temp.next != head) {
+                temp = temp.next;
+            }
+            newNode.next = head;
+            temp.next = newNode;
+            head = newNode;
+        }
+    }
+
+    // Insert at the end
+    public void insertAtEnd(Product product) {
+        Node newNode = new Node(product);
+        if (head == null) {
+            head = newNode;
+            newNode.next = head;
+        } else {
+            Node temp = head;
+            while (temp.next != head) {
+                temp = temp.next;
+            }
+            temp.next = newNode;
+            newNode.next = head;
+        }
+    }
+
+    // Insert by position
+    public void insertByPosition(Product product, int position) {
+        if (position < 1) {
+            System.out.println("Invalid position.");
+            return;
+        }
+        if (position == 1) {
+            insertAtStart(product);
+            return;
+        }
+        Node newNode = new Node(product);
+        Node temp = head;
+        for (int i = 1; i < position - 1; i++) {
+            if (temp.next == head) {
+                System.out.println("Position out of bounds.");
+                return;
+            }
+            temp = temp.next;
+        }
+        newNode.next = temp.next;
+        temp.next = newNode;
+    }
+
+    // Insert by value
+    public void insertByValue(Product product, double value) {
+        Node newNode = new Node(product);
+        if (head == null) {
+            head = newNode;
+            newNode.next = head;
+        } else {
+            Node temp = head;
+            while (temp.next != head && temp.next.data.price < value) {
+                temp = temp.next;
+            }
+            newNode.next = temp.next;
+            temp.next = newNode;
+        }
+    }
+
+    // Delete at the start
+    public void deleteAtStart() {
+        if (head == null) {
+            System.out.println("List is empty.");
+            return;
+        }
+        if (head.next == head) {
+            head = null;
+        } else {
+            Node temp = head;
+            while (temp.next != head) {
+                temp = temp.next;
+            }
+            temp.next = head.next;
+            head = head.next;
+        }
+    }
+
+    // Delete at the end
+    public void deleteAtEnd() {
+        if (head == null) {
+            System.out.println("List is empty.");
+            return;
+        }
+        if (head.next == head) {
+            head = null;
+        } else {
+            Node temp = head;
+            Node prev = null;
+            while (temp.next != head) {
+                prev = temp;
+                temp = temp.next;
+            }
+            prev.next = head;
+        }
+    }
+
+    // Delete by value
+    public void deleteByValue(double value) {
+        if (head == null) {
+            System.out.println("List is empty.");
+            return;
+        }
+        if (head.data.price == value) {
+            deleteAtStart();
+            return;
+        }
+        Node temp = head;
+        Node prev = null;
+        while (temp.next != head && temp.data.price != value) {
+            prev = temp;
+            temp = temp.next;
+        }
+        if (temp.data.price != value) {
+            System.out.println("Product with given value not found.");
+            return;
+        }
+        prev.next = temp.next;
+    }
+
+    // Delete by position
+    public void deleteByPosition(int position) {
+        if (position < 1 || head == null) {
+            System.out.println("Invalid position.");
+            return;
+        }
+        if (position == 1) {
+            deleteAtStart();
+            return;
+        }
+        Node temp = head;
+        Node prev = null;
+        for (int i = 1; i < position && temp.next != head; i++) {
+            prev = temp;
+            temp = temp.next;
+        }
+        if (temp.next == head) {
+            System.out.println("Position out of bounds.");
+            return;
+        }
+        prev.next = temp.next;
+    }
+
+    // Print alternate nodes
+    public void printAlternateNodes() {
+        if (head == null) {
+            System.out.println("List is empty.");
+            return;
+        }
+        Node temp = head;
+        boolean printFlag = true;
+        do {
+            if (printFlag) {
+                System.out.println(temp.data);
+            }
+            printFlag = !printFlag;
+            temp = temp.next;
+        } while (temp != head);
+    }
+
+    // Print in descending order based on price
+    public void printDescendingOrder() {
+        if (head == null) {
+            System.out.println("List is empty.");
+            return;
+        }
+        Node temp = head;
+        double[] prices = new double[countNodes()];
+        for (int i = 0; i < prices.length; i++) {
+            prices[i] = temp.data.price;
+            temp = temp.next;
+        }
+        for (int i = prices.length - 1; i >= 0; i--) {
+            temp = head;
+            while (temp != head && temp.data.price != prices[i]) {
+                temp = temp.next;
+            }
+            System.out.println(temp.data);
+        }
+    }
+
+    // Print in reverse order
+    public void printReverseOrder() {
+        if (head == null) {
+            System.out.println("List is empty.");
+            return;
+        }
+        printReverseOrderHelper(head);
+    }
+
+    private void printReverseOrderHelper(Node node) {
+        if (node.next != head) {
+            printReverseOrderHelper(node.next);
+        }
+        System.out.println(node.data);
+    }
+
+    // Display the product with its attributes
+    public void displayProduct(int productId) {
+        Node temp = head;
+        do {
+            if (temp.data.id == productId) {
+                System.out.println(temp.data);
+                return;
+            }
+            temp = temp.next;
+        } while (temp != head);
+        System.out.println("Product with given ID not found.");
+    }
+
+    // Count nodes in the circular linked list
+    private int countNodes() {
+        if (head == null) {
+            return 0;
+        }
+        Node temp = head;
+        int count = 0;
+        do {
+            count++;
+            temp = temp.next;
+        } while (temp != head);
+        return count;
+    }
+}
+
+
+package circularlist;
+
+import java.util.Scanner;
+
+public class CircularLinkedListMenu {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        CircularLinkedList circularLinkedList = new CircularLinkedList();
+
+        while (true) {
+            System.out.println("\nCircular Linked List Menu:");
+            System.out.println("1. Insert at the Start");
+            System.out.println("2. Insert at the End");
+            System.out.println("3. Insert by Position");
+            System.out.println("4. Insert by Value");
+            System.out.println("5. Delete at the Start");
+            System.out.println("6. Delete at the End");
+            System.out.println("7. Delete by Value");
+            System.out.println("8. Delete by Position");
+            System.out.println("9. Print Alternate Nodes");
+            System.out.println("10. Print Descending Order based on Price");
+            System.out.println("11. Print Reverse Order");
+            System.out.println("12. Display Product by ID");
+            System.out.println("13. Exit");
+            System.out.print("Enter your choice: ");
+
+            int choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter product ID: ");
+                    int id1 = scanner.nextInt();
+                    System.out.print("Enter product name: ");
+                    String name1 = scanner.next();
+                    System.out.print("Enter product price: ");
+                    double price1 = scanner.nextDouble();
+                    circularLinkedList.insertAtStart(new Product(id1, name1, price1));
+                    break;
+
+                case 2:
+                    System.out.print("Enter product ID: ");
+                    int id2 = scanner.nextInt();
+                    System.out.print("Enter product name: ");
+                    String name2 = scanner.next();
+                    System.out.print("Enter product price: ");
+                    double price2 = scanner.nextDouble();
+                    circularLinkedList.insertAtEnd(new Product(id2, name2, price2));
+                    break;
+
+                case 3:
+                    System.out.print("Enter product ID: ");
+                    int id3 = scanner.nextInt();
+                    System.out.print("Enter product name: ");
+                    String name3 = scanner.next();
+                    System.out.print("Enter product price: ");
+                    double price3 = scanner.nextDouble();
+                    System.out.print("Enter position: ");
+                    int position3 = scanner.nextInt();
+                    circularLinkedList.insertByPosition(new Product(id3, name3, price3), position3);
+                    break;
+
+                case 4:
+                    System.out.print("Enter product ID: ");
+                    int id4 = scanner.nextInt();
+                    System.out.print("Enter product name: ");
+                    String name4 = scanner.next();
+                    System.out.print("Enter product price: ");
+                    double price4 = scanner.nextDouble();
+                    System.out.print("Enter value: ");
+                    double value4 = scanner.nextDouble();
+                    circularLinkedList.insertByValue(new Product(id4, name4, price4), value4);
+                    break;
+
+                case 5:
+                    circularLinkedList.deleteAtStart();
+                    break;
+
+                case 6:
+                    circularLinkedList.deleteAtEnd();
+                    break;
+
+                case 7:
+                    System.out.print("Enter value: ");
+                    double value7 = scanner.nextDouble();
+                    circularLinkedList.deleteByValue(value7);
+                    break;
+
+                case 8:
+                    System.out.print("Enter position: ");
+                    int position8 = scanner.nextInt();
+                    circularLinkedList.deleteByPosition(position8);
+                    break;
+
+                case 9:
+                    circularLinkedList.printAlternateNodes();
+                    break;
+
+                case 10:
+                    circularLinkedList.printDescendingOrder();
+                    break;
+
+                case 11:
+                    circularLinkedList.printReverseOrder();
+                    break;
+
+                case 12:
+                	
+                	
+                   System.out.print("Enter product ID: ");
+                  int productId12 = scanner.nextInt();
+                    //circularLinkedList.displayProduct();
+                    break;
+
+                case 13:
+                    System.out.println("Exiting program.");
+                    System.exit(0);
+
+                default:
+                    System.out.println("Invalid choice. Please enter a valid option.");
+            }
+        }
+    }
+}
+
+    
+
+class Node {
+    Product data;
+    Node next;
+
+    public Node(Product data) {
+        this.data = data;
+        this.next = null;
+    }
+}
+
+package circularlist;
+
+import java.util.Scanner;
+
+class Product {
+  public  int id;
+  public String name;
+  public double price;
+
+    public Product(int id, String name, double price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+    }
+
+@Override
+    public String toString() {
+        return "ID: " + id + ", Name: " + name + ", Price: " + price;
+    }
+}

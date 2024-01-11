@@ -1,0 +1,411 @@
+package linked;
+
+class DoublyLinkedList {
+    Node1 head;
+
+    public void insertAtStart(Product1 data) {
+        Node1 newNode = new Node1(data);
+        if (head == null) {
+            head = newNode;
+        } else {
+            newNode.next = head;
+            head.prev = newNode;
+            head = newNode;
+        }
+    }
+
+    public void insertAtEnd(Product1 data) {
+        Node1 newNode = new Node1(data);
+        if (head == null) {
+            head = newNode;
+        } else {
+            Node1 temp = head;
+            while (temp.next != null) {
+                temp = temp.next;
+            }
+            temp.next = newNode;
+            newNode.prev = temp;
+        }
+    }
+
+    public void insertByPosition(Product1 data, int position) {
+        if (position < 1) {
+            System.out.println("Invalid position.");
+            return;
+        }
+
+        Node1 newNode = new Node1(data);
+
+        if (position == 1) {
+            newNode.next = head;
+            if (head != null) {
+                head.prev = newNode;
+            }
+            head = newNode;
+        } else {
+            Node1 temp = head;
+            for (int i = 1; i < position - 1 && temp != null; i++) {
+                temp = temp.next;
+            }
+
+            if (temp == null) {
+                System.out.println("Invalid position.");
+                return;
+            }
+
+            newNode.next = temp.next;
+            newNode.prev = temp;
+            if (temp.next != null) {
+                temp.next.prev = newNode;
+            }
+            temp.next = newNode;
+        }
+    }
+
+    public void insertByValue(Product1 data, double value) {
+        Node1 newNode = new Node1(data);
+
+        Node1 temp = head;
+        while (temp != null && temp.data.price != value) {
+            temp = temp.next;
+        }
+
+        if (temp == null) {
+            System.out.println("Value not found.");
+            return;
+        }
+
+        newNode.next = temp.next;
+        newNode.prev = temp;
+        if (temp.next != null) {
+            temp.next.prev = newNode;
+        }
+        temp.next = newNode;
+    }
+
+    public void deleteAtStart() {
+        if (head == null) {
+            System.out.println("List is empty.");
+            return;
+        }
+
+        head = head.next;
+        if (head != null) {
+            head.prev = null;
+        }
+    }
+
+    public void deleteAtEnd() {
+        if (head == null) {
+            System.out.println("List is empty.");
+            return;
+        }
+
+        if (head.next == null) {
+            head = null;
+            return;
+        }
+
+        Node1 temp = head;
+        while (temp.next != null) {
+            temp = temp.next;
+        }
+
+        temp.prev.next = null;
+    }
+
+    public void deleteByPosition(int position) {
+        if (head == null || position < 1) {
+            System.out.println("Invalid position.");
+            return;
+        }
+
+        if (position == 1) {
+            head = head.next;
+            if (head != null) {
+                head.prev = null;
+            }
+        } else {
+            Node1 temp = head;
+            for (int i = 1; i < position && temp != null; i++) {
+                temp = temp.next;
+            }
+
+            if (temp == null) {
+                System.out.println("Invalid position.");
+                return;
+            }
+
+            temp.prev.next = temp.next;
+            if (temp.next != null) {
+                temp.next.prev = temp.prev;
+            }
+        }
+    }
+
+    public void deleteByValue(double value) {
+        if (head == null) {
+            System.out.println("List is empty.");
+            return;
+        }
+
+        if (head.data.price == value) {
+            head = head.next;
+            if (head != null) {
+                head.prev = null;
+            }
+            return;
+        }
+
+        Node1 temp = head;
+        while (temp != null && temp.data.price != value) {
+            temp = temp.next;
+        }
+
+        if (temp == null) {
+            System.out.println("Value not found.");
+            return;
+        }
+
+        temp.prev.next = temp.next;
+        if (temp.next != null) {
+            temp.next.prev = temp.prev;
+        }
+    }
+
+    public void printAlternateNodes() {
+        Node1 temp = head;
+        boolean print = true;
+
+        while (temp != null) {
+            if (print) {
+                temp.data.display();
+            }
+            print = !print;
+            temp = temp.next;
+        }
+    }
+
+    public void printDescendingOrder() {
+        // Sort the list in descending order based on price before printing
+        sortDescendingOrder();
+        
+        Node1 temp = head;
+        while (temp != null) {
+            temp.data.display();
+            temp = temp.next;
+        }
+    }
+
+    private void sortDescendingOrder() {
+        // Bubble Sort
+        Node1 current = head;
+        Node1 index = null;
+
+        while (current != null) {
+            index = current.next;
+
+            while (index != null) {
+                if (current.data.price < index.data.price) {
+                    // Swap the products
+                    Product1 temp = current.data;
+                    current.data = index.data;
+                    index.data = temp;
+                }
+
+                index = index.next;
+            }
+
+            current = current.next;
+        }
+    }
+
+    public void printReverseOrder() {
+        Node1 temp = head;
+        while (temp.next != null) {
+            temp = temp.next;
+        }
+
+        while (temp != null) {
+            temp.data.display();
+            temp = temp.prev;
+        }
+    }
+
+    public void displayProducts() {
+        Node1 temp = head;
+        while (temp != null) {
+            temp.data.display();
+            temp = temp.next;
+        }
+    }
+}
+
+
+
+
+package linked;
+
+import java.util.Scanner;
+
+public class doublyLinkedList1 {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        DoublyLinkedList productList = new DoublyLinkedList();
+
+        while (true) {
+            System.out.println("\nMenu:");
+            System.out.println("1. Insert at Start");
+            System.out.println("2. Insert at End");
+            System.out.println("3. Insert by Position");
+            System.out.println("4. Insert by Value");
+            System.out.println("5. Delete at Start");
+            System.out.println("6. Delete at End");
+            System.out.println("7. Delete by Position");
+            System.out.println("8. Delete by Value");
+            System.out.println("9. Print Alternate Nodes");
+            System.out.println("10. Print Descending Order");
+            System.out.println("11. Print Reverse Order");
+            System.out.println("12. Display Products");
+            System.out.println("13. Exit");
+            System.out.print("Enter your choice: ");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline character
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter product ID: ");
+                    int idStart = scanner.nextInt();
+                    scanner.nextLine(); // Consume the newline character
+                    System.out.print("Enter product name: ");
+                    String nameStart = scanner.nextLine();
+                    System.out.print("Enter product price: ");
+                    double priceStart = scanner.nextDouble();
+                    productList.insertAtStart(new Product1(idStart, nameStart, priceStart));
+                    break;
+
+                case 2:
+                    System.out.print("Enter product ID: ");
+                    int idEnd = scanner.nextInt();
+                    scanner.nextLine(); // Consume the newline character
+                    System.out.print("Enter product name: ");
+                    String nameEnd = scanner.nextLine();
+                    System.out.print("Enter product price: ");
+                    double priceEnd = scanner.nextDouble();
+                    productList.insertAtEnd(new Product1(idEnd, nameEnd, priceEnd));
+                    break;
+
+                case 3:
+                    System.out.print("Enter product ID: ");
+                    int idPosition = scanner.nextInt();
+                    scanner.nextLine(); // Consume the newline character
+                    System.out.print("Enter product name: ");
+                    String namePosition = scanner.nextLine();
+                    System.out.print("Enter product price: ");
+                    double pricePosition = scanner.nextDouble();
+                    System.out.print("Enter position: ");
+                    int position = scanner.nextInt();
+                    productList.insertByPosition(new Product1(idPosition, namePosition, pricePosition), position);
+                    break;
+
+                case 4:
+                    System.out.print("Enter product ID: ");
+                    int idValue = scanner.nextInt();
+                    scanner.nextLine(); // Consume the newline character
+                    System.out.print("Enter product name: ");
+                    String nameValue = scanner.nextLine();
+                    System.out.print("Enter product price: ");
+                    double priceValue = scanner.nextDouble();
+                    System.out.print("Enter value to insert after: ");
+                    double value = scanner.nextDouble();
+                    productList.insertByValue(new Product1(idValue, nameValue, priceValue), value);
+                    break;
+
+                case 5:
+                    productList.deleteAtStart();
+                    break;
+
+                case 6:
+                    productList.deleteAtEnd();
+                    break;
+
+                case 7:
+                    System.out.print("Enter position to delete: ");
+                    int deletePosition = scanner.nextInt();
+                    productList.deleteByPosition(deletePosition);
+                    break;
+
+                case 8:
+                    System.out.print("Enter value to delete: ");
+                    double deleteValue = scanner.nextDouble();
+                    productList.deleteByValue(deleteValue);
+                    break;
+
+                case 9:
+                    productList.printAlternateNodes();
+                    break;
+
+                case 10:
+                    productList.printDescendingOrder();
+                    break;
+
+                case 11:
+                    productList.printReverseOrder();
+                    break;
+
+                case 12:
+                    productList.displayProducts();
+                    break;
+
+                case 13:
+                    System.out.println("Exiting program.");
+                    System.exit(0);
+                    break;
+
+                default:
+                    System.out.println("Invalid choice. Please enter a number between 1 and 13.");
+            }
+        }
+    }
+}
+
+
+
+package linked;
+
+
+
+
+class Node1 {
+    Product1 data;
+    Node1 prev;
+    Node1 next;
+
+    public Node1(Product1 data) {
+        this.data = data;
+        this.prev = null;
+        this.next = null;
+    }
+}
+
+package linked;
+
+
+
+
+class Product1 {
+	    int id;
+	    String name;
+	    double price;
+
+	    public Product1(int id, String name, double price) {
+	        this.id = id;
+	        this.name = name;
+	        this.price = price;
+	    }
+
+	    public void display() {
+	        System.out.println("ID: " + id + ", Name: " + name + ", Price: " + price);
+	    }
+	}

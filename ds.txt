@@ -1,0 +1,155 @@
+package doublee;
+import java.util.Scanner;
+
+class Node {
+    int data;
+    Node next;
+    Node prev;
+
+    public Node(int data) {
+        this.data = data;
+        this.next = null;
+        this.prev = null;
+    }
+}
+
+class DoublyStack {
+    private Node top;
+    private int maxSize;
+    private int size;
+
+    public DoublyStack(int maxSize) {
+        this.top = null;
+        this.maxSize = maxSize;
+        this.size = 0;
+    }
+
+    public void push(int data) {
+        if (!isFull()) {
+            Node newNode = new Node(data);
+            if (top == null) {
+                top = newNode;
+            } else {
+                newNode.next = top;
+                top.prev = newNode;
+                top = newNode;
+            }
+            size++;
+            System.out.println("Pushed element: " + data);
+        } else {
+            System.out.println("Stack is full. Cannot push more elements.");
+        }
+    }
+
+    public int pop() {
+        if (!isEmpty()) {
+            int poppedData = top.data;
+            top = top.next;
+            if (top != null) {
+                top.prev = null;
+            }
+            size--;
+            System.out.println("Popped element: " + poppedData);
+            return poppedData;
+        } else {
+            System.out.println("Stack is empty. Cannot pop from an empty stack.");
+            return -1; // Assuming -1 as an indicator of an empty stack
+        }
+    }
+
+    public int peek() {
+        if (!isEmpty()) {
+            System.out.println("Top element: " + top.data);
+            return top.data;
+        } else {
+            System.out.println("Stack is empty. Cannot peek into an empty stack.");
+            return -1; // Assuming -1 as an indicator of an empty stack
+        }
+    }
+
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    public boolean isFull() {
+        return size == maxSize;
+    }
+
+    public void display() {
+        if (!isEmpty()) {
+            System.out.println("Stack elements:");
+            Node current = top;
+            while (current != null) {
+                System.out.println(current.data);
+                current = current.next;
+            }
+        } else {
+            System.out.println("Stack is empty. Nothing to display.");
+        }
+    }
+}
+
+
+
+package doublee;
+
+import java.util.Scanner;
+
+public class DoublyStackProgram {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter the maximum size of the stack: ");
+        int maxSize = scanner.nextInt();
+        scanner.nextLine(); // Consume the newline character
+
+        DoublyStack stack = new DoublyStack(maxSize);
+
+        while (true) {
+            System.out.println("\nMenu:");
+            System.out.println("1. Push");
+            System.out.println("2. Pop");
+            System.out.println("3. Peek");
+            System.out.println("4. Display");
+            System.out.println("5. Is Empty?");
+            System.out.println("6. Is Full?");
+            System.out.println("7. Exit");
+
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline character
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter element to push: ");
+                    int pushElement = scanner.nextInt();
+                    stack.push(pushElement);
+                    break;
+                case 2:
+                    stack.pop();
+                    break;
+                case 3:
+                    stack.peek();
+                    break;
+                case 4:
+                    stack.display();
+                    break;
+                case 5:
+                    System.out.println("Stack is " + (stack.isEmpty() ? "empty." : "not empty."));
+                    break;
+                case 6:
+                    System.out.println("Stack is " + (stack.isFull() ? "full." : "not full."));
+                    break;
+                case 7:
+                    System.out.println("Exiting the program. Goodbye!");
+                    scanner.close();
+                    System.exit(0);
+                default:
+                    System.out.println("Invalid choice. Please enter a valid option.");
+                    break;
+            }
+        }
+    }
+}
+
+

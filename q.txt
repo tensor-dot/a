@@ -1,0 +1,45 @@
+import java.util.LinkedList;
+import java.util.Queue;
+public class QueuePerson 
+{Queue<Person>queues;
+public QueuePerson(){
+this.queues=new LinkedList<>();}
+void add(Person person)
+{queues.add(person);}
+Person remove()
+{return queues.poll();}
+Person peeks(){return queues.peek();}
+public int size(){ 
+return queues.size();}
+Boolean isEmpty()
+{ return queues.isEmpty();}
+	
+Person searchbyname(String ename){
+for(Person perso:queues){
+if(perso.name.equals(ename))
+{return perso;}}return null;}
+void sortdescending()
+ {queues.stream().sorted((p1,p2)->Integer.compare(p2.id, p1.id))
+  .forEachOrdered(queues::add);}
+ public void  display(){for(Person pers:queues)
+{System.out.println("name"+ pers.name +" price"+pers.price +"id"+pers.id);}}}
+
+
+public class Queueprogram {
+public static void main(String  []args)
+{QueuePerson qp= new QueuePerson();Scanner sc = new Scanner(System.in);
+while(true){System.out.println(" menu 1 2 3 4 5 6");
+System.out.println("choice");
+int  ch=sc.nextInt();
+switch(ch){case 1: qp.add(new Person(":ba",234,89));break;
+case 2: qp.add(new Person(":we",456,21));break;
+case 3:	qp.display();break;
+case 4: System.out.println("remove" +qp.remove().getName());break;
+case 5: System.out.println("peek" +qp.peeks());break;
+case 6: System.out.println("size" +qp.size());break;
+case 7: System.out.println("empty" +qp.isEmpty());break;
+case 9: qp.sortdescending();break;
+case 8: Person per =qp.searchbyname( ":ba");
+if (per!=null){System.out.println(" person found"+per.name+ per.id);}
+else System.out.println(" not found");
+case 10: System.out.println("exit");break;default:sc.close();break;}}}}
